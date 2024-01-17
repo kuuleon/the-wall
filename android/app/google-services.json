@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "897081432580",
+    "project_id": "authtutorial1-e78bd",
+    "storage_bucket": "authtutorial1-e78bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897081432580:android:b28d7820bcb061febd7351",
+        "android_client_info": {
+          "package_name": "com.example.the_wall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCARKGgMsLyhIphAvC1MzhKoAtJr8WAR9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
