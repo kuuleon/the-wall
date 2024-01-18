@@ -5,21 +5,22 @@ import 'package:the_wall/components/my_text_field.dart';
 import 'package:the_wall/components/square_tile.dart';
 import 'package:the_wall/services/auth_service.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  LoginPage({super.key, required this.onTap});
+  RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   //text editnig controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  //sign user in method
-  void signUserIn() async {
+  //sign user up method
+  void signUserUp() async {
     //show loading circle
     showDialog(
         context: context,
@@ -27,30 +28,39 @@ class _LoginPageState extends State<LoginPage> {
           return const Center(child: CircularProgressIndicator());
         });
 
-    //try sign in
+    //try creating user
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      //check if password is confirmed
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      } else {
+        //show error message, passwords dont match
+        showErrorMessage(
+            errorTitle: 'Passwords dont match!',
+            errorMessage: 'Please try again!');
+      }
       // pop the loading circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       //pop the loading circle
       Navigator.pop(context);
       // //WRONG EMAIL OR PASSWORD
-      wrongEmailorPasswordMessage(e.code);
+      showErrorMessage(
+          errorTitle: e.code,
+          errorMessage: 'Please enter a valid email address and password.');
     }
   }
 
-  void wrongEmailorPasswordMessage(message) {
+  void showErrorMessage({errorTitle, required String errorMessage}) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(message),
-          content:
-              const Text('Please enter a valid email address and password.'),
+          title: Text(errorTitle),
+          content: Text(errorMessage),
           actions: [
             TextButton(
               onPressed: () {
@@ -72,16 +82,16 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
         child: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 25),
 
             //logo
-            const Icon(Icons.lock, size: 100),
-            const SizedBox(height: 50),
+            const Icon(Icons.lock, size: 50),
+            const SizedBox(height: 25),
 
-            //welcome back, you've been missed!
-            Text('Welcome back you\'ve  been missed!',
+            //Let's create an account for you!
+            Text('Let\'s create an account for you!',
                 style: TextStyle(color: Colors.grey[700], fontSize: 16)),
-            const SizedBox(height: 50),
+            const SizedBox(height: 25),
 
             //email textfield
             MyTextField(
@@ -99,22 +109,18 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 10),
 
-            //forgot password?
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]))
-                  ],
-                )),
-            const SizedBox(height: 25),
+            //confirm password textfield
+            MyTextField(
+              controller: confirmPasswordController,
+              obscureText: true,
+              hintText: 'Confirm Password',
+            ),
+            const SizedBox(height: 50),
 
             //sign in buttton
             MyButton(
-              text: 'Sign in',
-              onTap: signUserIn,
+              text: 'Sign up',
+              onTap: signUserUp,
             ),
             const SizedBox(height: 50),
 
@@ -145,30 +151,31 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //google button
+                //google
                 SquareTile(
                   imagePath: 'lib/images/google.png',
                   onTap: () => AuthService().signInWithGoogle(),
                 ),
                 const SizedBox(width: 25),
-                //apple button
                 SquareTile(
-                    imagePath: 'lib/images/black-apple.png', onTap: () {}),
+                  imagePath: 'lib/images/black-apple.png',
+                  onTap: () {},
+                ),
               ],
             ),
             const SizedBox(height: 50),
 
-            //not a member? register now
+            //Already have an account? Login NOW
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Not a member?',
+                Text('Already have an account?',
                     style: TextStyle(color: Colors.grey[700])),
                 const SizedBox(width: 4),
                 GestureDetector(
                   onTap: widget.onTap,
                   child: const Text(
-                    'Registe NOW',
+                    'Login NOW',
                     style: TextStyle(
                         color: Colors.blue, fontWeight: FontWeight.bold),
                   ),

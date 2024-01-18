@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
+  <dict>
+  <!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+  <!-- Google Sign-in Section -->
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <!-- TODO Replace this value: -->
+        <!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+        <string>com.googleusercontent.apps.897081432580-3sj5481ie58g8f3o5q1dbo5ihimtep8a</string>
+      </array>
+    </dict>
+  </array>
+  <!-- End of the Google Sign-in Section -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
