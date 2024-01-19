@@ -24,26 +24,26 @@ class _RegisterPageState extends State<RegisterPage> {
     //show loading circle
     showDialog(
         context: context,
-        builder: (context) {
-          return const Center(child: CircularProgressIndicator());
-        });
+        builder: (context) => const Center(child: CircularProgressIndicator()));
+
+    if (passwordController.text != confirmPasswordController.text) {
+      //show error message, passwords dont match
+      showErrorMessage(
+          errorTitle: 'Passwords dont match!',
+          errorMessage: 'Please try again!');
+      return;
+    }
 
     //try creating user
     try {
       //check if password is confirmed
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-      } else {
-        //show error message, passwords dont match
-        showErrorMessage(
-            errorTitle: 'Passwords dont match!',
-            errorMessage: 'Please try again!');
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      if (context.mounted) {
+        Navigator.pop(context);
       }
-      // pop the loading circle
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       //pop the loading circle
       Navigator.pop(context);
@@ -51,6 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
       showErrorMessage(
           errorTitle: e.code,
           errorMessage: 'Please enter a valid email address and password.');
+      return;
     }
   }
 
@@ -65,6 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the alert dialog
+                Navigator.pop(context);
               },
               child: const Text('Close'),
             ),
@@ -177,7 +179,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: const Text(
                     'Login NOW',
                     style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                        color: Colors.green, fontWeight: FontWeight.bold),
                   ),
                 )
               ],

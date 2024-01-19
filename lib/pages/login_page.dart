@@ -7,7 +7,7 @@ import 'package:the_wall/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  LoginPage({super.key, required this.onTap});
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text(
                     'Registe NOW',
                     style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                        color: Colors.green, fontWeight: FontWeight.bold),
                   ),
                 )
               ],
