@@ -43,7 +43,26 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void wrongEmailorPasswordMessage(message) {
+  // wrong email or password message
+  void wrongEmailorPasswordMessage(String errorCode) {
+    String message = '';
+    switch (errorCode) {
+      case 'invalid-email':
+        message = 'Invalid email address';
+        break;
+      case 'user-disabled':
+        message = 'User disabled';
+        break;
+      case 'user-not-found':
+        message = 'User not found';
+        break;
+      case 'wrong-password':
+        message = 'Wrong password';
+        break;
+      default:
+        message = 'Something went wrong';
+    }
+
     showDialog(
       context: context,
       builder: (context) {
@@ -61,6 +80,53 @@ class _LoginPageState extends State<LoginPage> {
           ],
         );
       },
+    );
+  }
+
+  //method of forgot password
+  void forgotPassword() async {
+    String email = '';
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: const Text(
+          'Forgot Password',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: TextField(
+          autofocus: true,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+          decoration: const InputDecoration(
+            hintText: 'Enter your email',
+            hintStyle: TextStyle(color: Colors.grey),
+          ),
+          onChanged: (value) {
+            email = value;
+          },
+        ),
+        actions: [
+          //cancel button
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+          ),
+
+          //send button
+          TextButton(
+            onPressed: () async {
+              //send password reset email
+              await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+              //pop the dialog
+              Navigator.pop(context);
+            },
+            child: const Text('Send', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -105,8 +171,16 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]))
+                    //forgot password button
+                    GestureDetector(
+                      onTap: forgotPassword,
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
                   ],
                 )),
             const SizedBox(height: 25),

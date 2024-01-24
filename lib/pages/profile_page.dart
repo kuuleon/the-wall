@@ -56,7 +56,7 @@ class ProfilePage extends StatelessWidget {
       );
 
       //update in firestore
-      if (newValue.trim().length > 0) {
+      if (newValue.trim().isNotEmpty) {
         //only update if there is something in the textfield
         await usersCollection.doc(currentUser.email).update({field: newValue});
       }

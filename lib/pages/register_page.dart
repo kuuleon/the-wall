@@ -27,7 +27,10 @@ class _RegisterPageState extends State<RegisterPage> {
         context: context,
         builder: (context) => const Center(child: CircularProgressIndicator()));
 
+    // when password and confirm password dosent match show error message
     if (passwordController.text != confirmPasswordController.text) {
+      //pop the loading circle
+      Navigator.pop(context);
       //show error message, passwords dont match
       showErrorMessage(
           errorTitle: 'Passwords dont match!',
